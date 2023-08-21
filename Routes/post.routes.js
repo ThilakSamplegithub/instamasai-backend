@@ -25,12 +25,31 @@ postRouter.post(`/add`, async (req, res) => {
 });
 postRouter.get("/",async(req,res)=>{
     try{
-       const userPost= await postModel.find()
-       console.log(userPost)
-       return res.json({msg:userPost})
+        const {user}=req.query
+        const query={}
+        query.user=user
+        if(query.user){
+            const post=  await postModel.find({user:query.user})
+            return res.status(200).json(post)
+        }else{
+          const allPosts=  await postModel.find()
+          return res.status(200).json({msg:allPosts})
+        }
     }catch(err){
-        res.send({err:err.message})
+        res.status(400).send({msg:err.message})
     }
+}
+)
+postRouter.get("/top",async(req,res)=>{
+try{
+     let allPosts= await postModel.find()
+    const descArrofComments=allPosts.sort((a,b)=>b.no_of_comments-a.no_of_comments)
+    allPosts=descArrofComments
+    const filteredArr=allPosts.filter((el,i)=>i<3)
+    return res.status(200).json({topElements:filteredArr})
+}catch(err){
+    res.send({err:err.message})
+}
 })
 postRouter.patch("/update/:id",async(req,res)=>{
     try{
