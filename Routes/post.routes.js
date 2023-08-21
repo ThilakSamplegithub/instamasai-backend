@@ -54,7 +54,7 @@ try{
 postRouter.patch("/update/:id",async(req,res)=>{
     try{
         const {id}=req.params
-const user=await findOne({_id:id})
+const user=await postModel.findOne({_id:id})
      if(String(user.userId)===req.userId){
       const updatedPost=await postModel.updateOne({_id:id},{$set:req.body})
       res.status(200).send(`updated successfully`)
@@ -68,7 +68,7 @@ const user=await findOne({_id:id})
 postRouter.delete("/delete/:id",async(req,res)=>{
     try{
         const {id}=req.params
-const user=await findOne({_id:id})
+const user=await postModel.findOne({_id:id})
      if(String(user.userId)===req.userId){
       const deletedPost=await postModel.deleteOne({_id:id})
       console.log(deletedPost)
