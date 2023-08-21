@@ -1,20 +1,31 @@
 const jwt=require("jsonwebtoken")
-const authMiddleware=(req,res,next)=>{
-    const token=req.headers.authorization
-    console.log(token)
-    if(token){
-        jwt.verify(token,"masai",(err,decoded)=>{
-            if(err){
-                res.send("You are not authorized")
+const { blackListModel } = require("../Models/blackList.model")
+const authMiddleware=async(req,res,next)=>{
+    try{
+        const token=req.headers.authorization
+      const blackListArr= await blackListModel.find()
+        if(token){
+            if(blackListArr.includes(token)){
+                res.send(`please login again`)
             }else{
-                console.log(decoded,"is decoded information")
-                req.userId=decoded.userId
-                req.userName=decoded.user
-                next()
+                jwt.verify(token,"masai",(err,decoded)=>{
+                    if(err){
+                        res.send(`please login again`)
+                    }else{
+                        console.log(decoded)
+                        req.userId=decoded.userId
+                        req.userName=decoded.user
+                        next()
+                    }
+                })
             }
-            })   
-    }else{
-        res.send("No token")
+        }
+    }catch(err){
+        res.send(err.message)
     }
+        const token=req.headers.authorization
+        console.log(token)
+       const blackListArr=  await blackListModel.find()
+
 }
 module.exports={authMiddleware}

@@ -1,6 +1,7 @@
 const express=require("express")
 require('dotenv').config()
 const {userRouter}=require("./Routes/user.routes")
+const {blackListModel}=require("./Models/blackList.model")
 const {connection}=require("./Config/db")
 const {authMiddleware}=require("./Middlewares/auth.middleware")
 const {postRouter}=require("./Routes/post.routes")

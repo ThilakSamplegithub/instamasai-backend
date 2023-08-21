@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const postRouter = Router();
-const blakcListModel=require("../Models/blackList.model")
-const postModel = require("../Models/post.model.js");
+const {blackListModel}=require("../Models/blackList.model")
+const {postModel} = require("../Models/post.model.js");
 // console.log(postModel,"is functionn or not")
 postRouter.post(`/add`, async (req, res) => {
   try {
@@ -62,9 +62,17 @@ const user=await findOne({_id:id})
     }
 })
 postRouter.get("/logout",async(req,res)=>{
-    const token=req.headers.authorization
-    console.log(blakcListModel)
-//    await blakcListModel.updateOne()
-    res.send("ok")
+    try{
+        const token=req.headers.authorization
+        if(token){
+           const list= await blackListModel.find()
+           list.push(token)
+           res.send("logged out successfully")
+        }else{
+            res.send(`please login`)
+        }
+    }catch(err){
+        res.send({err:err.message})
+    }
 })
 module.exports = { postRouter };

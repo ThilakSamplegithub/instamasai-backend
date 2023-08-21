@@ -6,7 +6,7 @@ const postSchema=mongoose.Schema({
     no_of_comments:{type:Number,required:true},
     userId:{type:String},
     user:{type:String}
-},{versionKey:false})
+})
 const postModel=mongoose.model("instaPost",postSchema)
-console.log(postModel)
+// console.log(postModel)
 module.exports={postModel}
